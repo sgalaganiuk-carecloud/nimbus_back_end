@@ -51,4 +51,7 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  config.x.carecloud_url = "https://external-api-gateway.development.carecloud.com/v2/providers"
+  config.x.carecloud_header = {'Authorization' => 'Bearer kW6y-82hOIFXT1_ayY3G70aG9WOy6cfL'}
 end
