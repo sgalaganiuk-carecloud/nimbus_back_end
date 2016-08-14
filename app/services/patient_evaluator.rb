@@ -1,5 +1,5 @@
 class PatientEvaluator
-  
+
   def initialize(queryObject)
     @primary_scope = queryObject[:primaryScope]
     @conditions = repair queryObject[:conditions]
@@ -7,6 +7,7 @@ class PatientEvaluator
 
   def call
     get_initial_set
+    puts "here"
     @set.select do |appointment|
       @conditions.all? do |condition|
         ConditionEvaluator.call(condition, appointment)
@@ -17,7 +18,7 @@ class PatientEvaluator
   def get_initial_set
     header = {'Authorization' => 'Bearer kW6y-82hOIFXT1_ayY3G70aG9WOy6cfL'}
     @set = HTTParty.get('https://external-api-gateway.development.carecloud.com/v2/appointments', headers: header)
-    @set.map! do |a| 
+    @set.map! do |a|
       a["balance"] = HTTParty.get("https://external-api-gateway.development.carecloud.com/v2/patients/#{a["appointment"]["patient"]["id"]}/balance", headers: header)
       a
     end
