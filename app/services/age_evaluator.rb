@@ -3,6 +3,7 @@ class AgeEvaluator
     dob = appointment["appointment"]["patient"]["date_of_birth"]
     age = (Time.now - Date.parse(dob).to_time) / 60 / 60 / 24 / 365
     condition["operator"] = "==" if condition["operator"] == "="
+    # byebug
     age.send(condition["operator"], condition["value"].to_i)
   end
 end

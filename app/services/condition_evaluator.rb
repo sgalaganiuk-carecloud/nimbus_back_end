@@ -2,8 +2,8 @@ class ConditionEvaluator
   EVALUATOR_MAP = {
     "age" => AgeEvaluator,
     "appointment" => AppointmentDateEvaluator,
-    "balance" => BalanceEvaluator,
-    "provider" => ProviderEvaluator
+    "balance" => BalanceEvaluator
+    # "provider" => ProviderEvaluator
   }
 
   def self.call(condition, appointment)
