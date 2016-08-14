@@ -2,7 +2,8 @@ class ConditionEvaluator
   EVALUATOR_MAP = {
     "age" => AgeEvaluator,
     "appointment" => AppointmentDateEvaluator,
-    "balance" => BalanceEvaluator
+    "balance" => BalanceEvaluator,
+    "status" => StatusEvaluator
     # "provider" => ProviderEvaluator
   }
 
