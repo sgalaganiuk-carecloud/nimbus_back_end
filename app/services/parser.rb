@@ -14,6 +14,10 @@ module Parser
       @same_table_params
     end
 
+    def mega_mapper(condition)
+      TABLENAMES[condition]
+    end
+
     def parse
       if @criteria["conditions"].nil?
         conditions_array = []
@@ -23,10 +27,14 @@ module Parser
       parameters = []
       same_table_params = {}
       conditions_array.each_with_index {|x,i|
-        x[1] = self.mega_mapper(x[1])
+        if x[1]
+          x[1]["table"] = mega_mapper(x[1]["type"])
+        end
         if x[1] && x[1]["table"] == @criteria["primaryScope"]
           x[1].keys.each { |xx|
-              same_table_params[xx]= x[1][xx]
+              if !["table", "type"].include?(xx)
+                same_table_params[xx]= x[1][xx]
+              end
           }
         else
             x[1] && x[1].keys.each {|xx|
@@ -34,34 +42,29 @@ module Parser
           }
         end
       }
-
-      puts get_data(same_table_params)
+      puts "SAME_TABLE_PARAMS: " + same_table_params.to_s
+      get_data(same_table_params)
       #parameters.each { |x|
       #    puts get_data(x)
       #}
 
     end
 
-    def self.mega_mapper(condition)
-      condition["table"] = TABLENAMES[condition["type"]]
-    end
-
     def url(condition)
       puts "condition: " + condition.to_s
       table = @criteria["primaryScope"]
       if !condition.empty? && condition.present?
-        table = condition['table']
         query_string = "?" + condition.to_query
       else
         query_string = ""
       end
-      "https://external-api-gateway.development.carecloud.com/v2/" + table + query_string
-    end
+      ("https://external-api-gateway.development.carecloud.com/v2/" + table + query_string).downcase
+     end
 
     def get_data(condition)
       puts "URL: " + url(condition).to_s
       puts "headers: " + HEADERS.to_s
-      HTTParty.get(url(condition), headers: HEADERS).body
+      HTTParty.get(url(condition).to_s.downcase, headers: HEADERS).body
     end
 
     def get_ids(data)
